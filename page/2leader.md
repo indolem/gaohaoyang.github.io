@@ -11,20 +11,20 @@ type: page
 <style>
 .styled-table {
     border-collapse: collapse;
-    margin: 20px 0;
+    margin: 12px 0;
     font-size: 0.9em;
     font-family: sans-serif;
     min-width: 400px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .styled-table thead tr {
-    background-color: #009879;
+    background-color: #44679F;
     color: #ffffff;
     text-align: left;
 }
 .styled-table th,
 .styled-table td {
-    padding: 7px 5px;
+    padding: 4px 3px;
 }
 .styled-table tbody tr {
     border-bottom: 1px solid #dddddd;
@@ -35,7 +35,7 @@ type: page
 }
 
 .styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #009879;
+    border-bottom: 2px solid #44679F;
 }
 .styled-table tbody tr.active-row {
     font-weight: bold;

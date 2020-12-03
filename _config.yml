@@ -7,7 +7,7 @@
 
 # Site settings
 title: IndoLEM
-brief-intro: Indonesian NLP Resource Collection
+brief-intro: Resource Collection
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://indolem.github.io" # the base hostname & protocol for your site
 
