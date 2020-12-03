@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>IndoBERT</title>
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="/indolem.png?" type="image/x-icon">
+    <link rel="icon" href="/indolem.png?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="https://indolem.github.io/IndoBERT/">
+    <link rel="alternate" type="application/rss+xml" title="IndoLEM" href="https://indolem.github.io/feed.xml ">
+
+
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">IndoLEM</a>
+        <small>Indonesian NLP Resource Collection</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a class="active" href="/IndoBERT/">
+                            
+                            <i class="fa fa-microchip"></i>IndoBERT
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/Task/">
+                        
+                            <i class="fa fa-database"></i>Data and Tasks
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/leaderboard/">
+                        
+                            <i class="fa fa-th-list"></i>Leaderboard
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/team/">
+                        
+                            <i class="fa fa-heart"></i>Team
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <!-- <h1>Archive of posts with page 'IndoBERT'</h1> -->
+
+
+<div class="page clearfix" index>
+
+    <div class="left" style="width: 100%; margin: 0 auto">
+      <h1> IndoBERT </h1>
+    </div>
+    <div class="left" style="width: 100%; margin: 0 auto">
+      <div>
+      <p style="font-size:95%">
+      <a href="https://huggingface.co/indolem/indobert-base-uncased" target="_blank"><b>IndoBERT</b></a>
+      is the Indonesian version of BERT model. We train the model using over 220M words, aggregated from three main sources:
+      </p>
+      </div>
+      <div>
+      <ul>
+        <li style="font-size:95%; color:#1A1818">Indonesian Wikipedia (74M words) </li>
+        <li style="font-size:95%; color:#1A1818">news articles from Kompas, Tempo (Tala et al., 2003)  and Liputan6 (55M words in total)</li>
+        <li style="font-size:95%; color:#1A1818">Indonesian Web Corpus (Medved and Suchomel, 2017) (90M words)</li>
+      </ul>
+      </div>
+      <div>
+      <p style="font-size:95%">
+      We trained the model for 2.4M steps (180 epochs) with the <b>final perplexity
+      over the development set being 3.97 (similar to English BERT-base)</b>.
+      </p>
+      </div>
+
+      <span style="font-size:95%"> <b>How to Use:</b> </span>
+      </br>
+      <span style="font-size:95%">We use Huggingface (Pytorch) Framework. You can download them by
+        <code>pip install transformers==3.5.1</code></span>
+      <div style="font-size:95%">
+        <code>from transformers import AutoTokenizer, AutoModel</code> </br>
+        <code>tokenizer = AutoTokenizer.from_pretrained("indolem/indobert-base-uncased")</code></br>
+        <code>model = AutoModel.from_pretrained("indolem/indobert-base-uncased")</code>
+      </div>
+      
+      </br>
+      <span style="font-size:95%"> <b>Reference for BERT and Transformer:</b> </span>
+      </br>
+      <span style="font-size:95%">Don't worry if you are new with pre-trained language model.
+        You can check these references:</span>
+      <div style="margin-top: 0">
+        <ul>
+          <li style="font-size:95%; color:#1A1818">
+            <a href="https://arxiv.org/abs/1706.03762" target="_blank">Attention is All You Need</a> </li>
+          <li style="font-size:95%; color:#1A1818">
+            <a href="https://arxiv.org/abs/1810.04805" target="_blank">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</a> </li>
+        </ul>
+      </div>
+    </div>
+</div>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+    <div class="wrapper">
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/indolem" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:indolem.benchmark@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>    
+            <a href="https://twitter.com/fajrikoto" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>     
+        </p>
+        <p>
+            Terimakasih, Ayo Kita Majukan NLP Indonesia    
+        </p>
+        <p class="power">
+            <span>
+                &copy; IndoLEM 2020.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

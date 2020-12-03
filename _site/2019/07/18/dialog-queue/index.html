@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>队列在前端弹窗中的应用</title>
+    <meta name="description" content="前端开发中，如果遇到复杂的交互逻辑，数据结构的知识将帮助你理清思路，抽象逻辑，完成稳定可靠的逻辑代码。本文就讲讲我在开发弹窗时加入的队列数据结构，也许有人疑问弹窗不是很简单吗，还需要引入队列？其实在复杂交互中，特别是互动类的界面中，很容易就会有超过 10 个弹窗对话框，万一同时被触发时，逻辑就会混乱，我们希望一个...">
+
+    <link rel="shortcut icon" href="/indolem.png?" type="image/x-icon">
+    <link rel="icon" href="/indolem.png?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="https://indolem.github.io/2019/07/18/dialog-queue/">
+    <link rel="alternate" type="application/rss+xml" title="IndoLEM" href="https://indolem.github.io/feed.xml ">
+
+
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">IndoLEM</a>
+        <small>Indonesian NLP Resource Collection</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/IndoBERT/">
+                        
+                            <i class="fa fa-microchip"></i>IndoBERT
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/Task/">
+                        
+                            <i class="fa fa-database"></i>Data and Tasks
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/leaderboard/">
+                        
+                            <i class="fa fa-th-list"></i>Leaderboard
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/team/">
+                        
+                            <i class="fa fa-heart"></i>Team
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>队列在前端弹窗中的应用</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2019-07-18
+            </div>
+
+            <div class="label-card">
+                <i class="fa fa-user"></i>HyG
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#JavaScript" title="Category: JavaScript" rel="category">JavaScript</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#dialog" title="Tag: dialog" rel="tag">dialog</a-->
+        <a href="/tag/#dialog" title="Tag: dialog" rel="tag">dialog</a>&nbsp;
+    
+        <!--a href="/tag/#queue" title="Tag: queue" rel="tag">queue</a-->
+        <a href="/tag/#queue" title="Tag: queue" rel="tag">queue</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">什么是队列</a></li>
+  <li><a href="#javascript-" id="markdown-toc-javascript-">JavaScript 实现队列</a></li>
+  <li><a href="#dialog" id="markdown-toc-dialog">对话框弹窗（Dialog）与队列的结合</a></li>
+  <li><a href="#toast-" id="markdown-toc-toast-">Toast 与队列的结合</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">小结</a></li>
+</ul>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1rgXfXYY1gK0jSZTEXXXDQVXa-700-404.png" alt="" /></p>
+
+<p>前端开发中，如果遇到复杂的交互逻辑，数据结构的知识将帮助你理清思路，抽象逻辑，完成稳定可靠的逻辑代码。</p>
+
+<p>本文就讲讲我在开发弹窗时加入的队列数据结构，也许有人疑问弹窗不是很简单吗，还需要引入队列？其实在复杂交互中，特别是互动类的界面中，很容易就会有超过 10 个弹窗对话框，万一同时被触发时，逻辑就会混乱，我们希望一个接一个的方式弹出，这里就需要队列了。</p>
+
+<h2 id="section">什么是队列</h2>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1y4MYXND1gK0jSZFKXXcJrVXa-406-274.png" alt="" /></p>
+
+<p><strong>队列（Queue）</strong> 是先进先出（FIFO, First-In-First-Out）的线性表。在具体应用中通常用链表或者数组来实现。队列只允许在尾部进行插入操作（入队 enqueue），在头部进行删除操作（出队 dequeue）。队列的操作方式和堆栈类似，唯一的区别在于队列只允许新数据在后端进行添加。上图清晰的描述了队列的特性。</p>
+
+<h2 id="javascript-">JavaScript 实现队列</h2>
+
+<p>一个队列数据结构要包含以下 api</p>
+
+<ul>
+  <li>入队</li>
+  <li>出队</li>
+  <li>获取头部元素</li>
+  <li>获取尾部元素</li>
+  <li>队列是否为空</li>
+</ul>
+
+<p>使用 JavaScript/TypeScript 数组可以模拟出这些 api，代码如下</p>
+
+<pre><code class="language-ts">class Queue {
+  private dataStore: any[]
+
+  constructor() {
+    this.dataStore = []
+  }
+
+  public enqueue(e: any): void {
+    this.dataStore.push(e)
+  }
+
+  public dequeue() {
+    this.dataStore.shift()
+  }
+
+  public front() {
+    return this.dataStore[0]
+  }
+
+  public back() {
+    return this.dataStore[this.dataStore.length - 1]
+  }
+
+  public isEmpty(): boolean {
+    if (this.dataStore.length === 0) {
+      return true
+    }
+    return false
+  }
+
+  public toString() {
+    return this.dataStore.join(',')
+  }
+}
+
+export default Queue
+</code></pre>
+
+<p>可以写些测试用例来验证这个队列的功能，保证我们的队列运行正常</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nx">Queue</span> <span class="nx">from</span> <span class="s1">'./Queues'</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'Queue'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">q</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Queue</span><span class="p">()</span>
+  <span class="nx">q</span><span class="p">.</span><span class="nx">enqueue</span><span class="p">(</span><span class="mi">1123</span><span class="p">)</span>
+  <span class="nx">q</span><span class="p">.</span><span class="nx">enqueue</span><span class="p">(</span><span class="s1">'chuanshi'</span><span class="p">)</span>
+  <span class="nx">q</span><span class="p">.</span><span class="nx">enqueue</span><span class="p">(</span><span class="s1">'666'</span><span class="p">)</span>
+  <span class="nx">test</span><span class="p">(</span><span class="s1">'queue'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">toString</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'1123,chuanshi,666'</span><span class="p">)</span>
+    <span class="nx">q</span><span class="p">.</span><span class="nx">dequeue</span><span class="p">()</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">toString</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'chuanshi,666'</span><span class="p">)</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">front</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'chuanshi'</span><span class="p">)</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">back</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'666'</span><span class="p">)</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">false</span><span class="p">)</span>
+    <span class="nx">q</span><span class="p">.</span><span class="nx">dequeue</span><span class="p">()</span>
+    <span class="nx">q</span><span class="p">.</span><span class="nx">dequeue</span><span class="p">()</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+  <span class="p">})</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+
+<p>这样我们就得到了一个队列的数据结构。</p>
+
+<h2 id="dialog">对话框弹窗（Dialog）与队列的结合</h2>
+
+<p>弹窗被触发唤起会有以下3种情况：<br />
+1. 同一时间段只有一个 Dialog 被触发<br />
+2. 同一时间段有2个 Dialog 同时被触发<br />
+3. Dialog 正在展示时，又触发了另一个 Dialog</p>
+
+<p>为了满足以上3种情况，需要在主线程和弹窗展示之间加一个队列控制逻辑，它们的时序图如下：</p>
+
+<!-- ![](https://gw.alicdn.com/tfs/TB124dgXYr1gK0jSZR0XXbP8XXa-333-313.svg)
+
+![](https://gw.alicdn.com/tfs/TB1zk4gXYj1gK0jSZFOXXc7GpXa-411-526.svg)
+
+![](https://gw.alicdn.com/tfs/TB1QIhfX7T2gK0jSZPcXXcKkpXa-411-526.svg) -->
+
+<pre><code class="language-plantuml">title 队列弹窗逻辑之1个弹窗
+
+right footer by Chuanshi 20190712
+
+skinparam activityBackgroundColor #efefef
+skinparam activityBorderColor #454545
+skinparam activityArrowColor #666666
+skinparam style strictuml
+
+participant DialogA order 10
+participant Main order 1
+participant QueueCtrl order 2
+
+activate Main
+
+Main -&gt; QueueCtrl: showDialogA
+activate QueueCtrl
+QueueCtrl -&gt; QueueCtrl: enqueue eventA
+
+QueueCtrl -&gt; DialogA: show
+activate DialogA
+DialogA -&gt; DialogA: showing
+DialogA -&gt; QueueCtrl: close
+deactivate DialogA
+QueueCtrl -&gt; QueueCtrl: dequeue eventA
+</code></pre>
+
+<pre><code class="language-plantuml">title 队列弹窗逻辑之2个弹窗同时被触发
+
+right footer by Chuanshi 20190712
+
+skinparam activityBackgroundColor #efefef
+skinparam activityBorderColor #454545
+skinparam activityArrowColor #666666
+skinparam style strictuml
+
+participant DialogA order 20
+participant DialogB order 30
+participant Main order 1
+participant QueueCtrl order 2
+
+activate Main
+
+Main -&gt; QueueCtrl: showDialogA
+activate QueueCtrl
+QueueCtrl -&gt; QueueCtrl: enqueue eventA
+Main -&gt; QueueCtrl: showDialogB
+QueueCtrl -&gt; QueueCtrl: enqueue eventB
+
+QueueCtrl -&gt; DialogA: show
+activate DialogA
+DialogA -&gt; DialogA: showing
+DialogA -&gt; QueueCtrl: close
+deactivate DialogA
+QueueCtrl -&gt; QueueCtrl: dequeue eventA
+
+QueueCtrl -&gt; DialogB: show
+activate DialogB
+DialogB -&gt; DialogB: showing
+DialogB -&gt; QueueCtrl: close
+deactivate DialogB
+QueueCtrl -&gt; QueueCtrl: dequeue eventB
+</code></pre>
+
+<pre><code class="language-plantuml">title 队列弹窗逻辑之1个正在展示时又触发另一个弹窗
+
+right footer by Chuanshi 20190712
+
+skinparam activityBackgroundColor #efefef
+skinparam activityBorderColor #454545
+skinparam activityArrowColor #666666
+skinparam style strictuml
+
+participant DialogA order 20
+participant DialogB order 30
+participant Main order 1
+participant QueueCtrl order 2
+
+activate Main
+
+Main -&gt; QueueCtrl: showDialogA
+activate QueueCtrl
+QueueCtrl -&gt; QueueCtrl: enqueue eventA
+QueueCtrl -&gt; DialogA: show
+activate DialogA
+DialogA -&gt; DialogA: showing
+Main -&gt; QueueCtrl: showDialogB
+QueueCtrl -&gt; QueueCtrl: enqueue eventB
+DialogA -&gt; QueueCtrl: close
+deactivate DialogA
+QueueCtrl -&gt; QueueCtrl: dequeue eventA
+QueueCtrl -&gt; DialogB: show
+activate DialogB
+DialogB -&gt; DialogB: showing
+DialogB -&gt; QueueCtrl: close
+deactivate DialogB
+QueueCtrl -&gt; QueueCtrl: dequeue eventB
+</code></pre>
+
+<p>上述时序图清晰的表达了弹窗触发的各种情况，那么起到关键作用的队列控制（QueueCtrl）部分应该如何编写呢？其实也很简单，它的逻辑如下：</p>
+
+<!-- ![](https://gw.alicdn.com/tfs/TB1q6NfX.T1gK0jSZFrXXcNCXXa-274-420.svg) -->
+
+<pre><code class="language-plantuml">
+skinparam activityBackgroundColor #efefef
+skinparam activityBorderColor #454545
+skinparam activityArrowColor #666666
+skinparam style strictuml
+
+title 队列弹窗逻辑活动图
+
+right footer by Chuanshi 20190712
+
+start
+fork
+  :元素入队;
+fork again
+while (队列为空?) is (false)
+  :队首弹窗触发;
+  :队首弹窗关闭;
+  :队首元素出队;
+endwhile (true)
+endfork
+stop
+</code></pre>
+
+<p>当空队列的第一个元素入队后，上图的右侧循环部分开始启动，同时依然可以有元素入队，直到右侧循环逻辑将队列所有元素出队后，整个活动停止。</p>
+
+<p>核心代码如下：</p>
+
+<pre><code class="language-ts">import Queue from './Queues'
+
+const queue = new Queue() // 实例化上文写好的队列类
+
+/**
+ * 将弹窗事件名推入队列
+ */
+const push = (eventName: globalEventName) =&gt; {
+  if (queue.isEmpty()) {
+    queue.enqueue(eventName)
+    openDialog() // 启动出队逻辑
+  } else {
+    queue.enqueue(eventName) // 循环中依然可以同时入队新的元素
+  }
+}
+
+/**
+ * 打开弹窗，递归，循环出队
+ */
+const openDialog = () =&gt; {
+  // 打开弹窗
+  document.dispatchEvent(new Event(queue.front()))
+
+  // 监听弹窗关闭
+  document.addEventListener(`${queue.front()}Close`, () =&gt; {
+    queue.dequeue() // 出队
+    if (!queue.isEmpty()) { // 队列不为空时，递归
+      openDialog()
+    }
+  })
+}
+
+export default {
+  push,
+}
+</code></pre>
+
+<p>只需要调用 <code class="highlighter-rouge">push()</code> 就可以达到我们的目的，可以看到使用队列这种数据结构，不到20行代码，非常简洁优雅的解决了这个问题！</p>
+
+<h2 id="toast-">Toast 与队列的结合</h2>
+
+<p>与 Dialog 类似，为了避免多次触发导致的 Toast 堆叠，把每一个要弹出的 Toast 内容入队，每个 Toast 完成时，出队，并递归调用展示，直到队列内容为空。这里不展开说明了。</p>
+
+<h2 id="section-1">小结</h2>
+
+<p>当然上面的需求不使用队列也可以实现，但是队列数据结构的意义在于可以让整个实现更加规范化、抽象化且易于维护。</p>
+
+<p>熟练掌握数据结构的知识，可以让开发的过程中思路更加清晰，代码抽象化程度更高，更加合理的组织代码，提高开发效率。当遇到棘手的问题时，可以多思考一些数据结构中的知识点，说不定可以达到事半功倍的效果呢！</p>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2018/10/10/vscode-plugin-schedule/">vscode 插件 markdown-schedule-snippet</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2020/03/01/react-hooks1-useState/">React Hooks 系列之1 useState</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'https://indolem.github.io/2019/07/18/dialog-queue/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'https://indolem.github.io/2019/07/18/dialog-queue/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//ffajri.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+    <div class="wrapper">
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/indolem" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:indolem.benchmark@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>    
+            <a href="https://twitter.com/fajrikoto" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>     
+        </p>
+        <p>
+            Terimakasih, Ayo Kita Majukan NLP Indonesia    
+        </p>
+        <p class="power">
+            <span>
+                &copy; IndoLEM 2020.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>React Hooks 系列之6 useMemo</title>
+    <meta name="description" content="掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。上一章，我们学习了 useCallback 来进行性能优化，关于性能优化还有另一个 hook api，那就是 useMemo，下面我们一起通过一个例子来看看。">
+
+    <link rel="shortcut icon" href="/indolem.png?" type="image/x-icon">
+    <link rel="icon" href="/indolem.png?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="https://indolem.github.io/2020/05/19/react-hooks6-useMemo/">
+    <link rel="alternate" type="application/rss+xml" title="IndoLEM" href="https://indolem.github.io/feed.xml ">
+
+
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">IndoLEM</a>
+        <small>Indonesian NLP Resource Collection</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/IndoBERT/">
+                        
+                            <i class="fa fa-microchip"></i>IndoBERT
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/Task/">
+                        
+                            <i class="fa fa-database"></i>Data and Tasks
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/leaderboard/">
+                        
+                            <i class="fa fa-th-list"></i>Leaderboard
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/team/">
+                        
+                            <i class="fa fa-heart"></i>Team
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>React Hooks 系列之6 useMemo</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2020-05-19
+            </div>
+
+            <div class="label-card">
+                <i class="fa fa-user"></i>HyG
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#JavaScript" title="Category: JavaScript" rel="category">JavaScript</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#React" title="Tag: React" rel="tag">React</a-->
+        <a href="/tag/#React" title="Tag: React" rel="tag">React</a>&nbsp;
+    
+        <!--a href="/tag/#hooks" title="Tag: hooks" rel="tag">hooks</a-->
+        <a href="/tag/#hooks" title="Tag: hooks" rel="tag">hooks</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">计数器示例</a></li>
+  <li><a href="#usememo" id="markdown-toc-usememo">useMemo</a>    <ul>
+      <li><a href="#section-1" id="markdown-toc-section-1">优化示例</a></li>
+      <li><a href="#usememo--usecallback-" id="markdown-toc-usememo--usecallback-">useMemo 与 useCallback 的区别</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-2" id="markdown-toc-section-2">小结</a></li>
+</ul>
+
+<p>掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。</p>
+
+<p>上一章，我们学习了 useCallback 来进行性能优化，关于性能优化还有另一个 hook api，那就是 useMemo，下面我们一起通过一个例子来看看。</p>
+
+<h2 id="section">计数器示例</h2>
+
+<p>依然是计数器示例，创建2个计数器，并能区分当前是奇数或者偶数，为了模拟点击按钮时包含大量的计算逻辑影响性能，在判断偶数的方法中添加了没有用的计算逻辑，为了让性能差的明显。代码如下</p>
+
+<p>Counter.tsx</p>
+
+<pre><code class="language-jsx">import React, { useState } from 'react'
+
+function Counter() {
+  const [counterOne, setCounterOne] = useState(0)
+  const [counterTwo, setCounterTwo] = useState(0)
+
+  const incrementOne = () =&gt; {
+    setCounterOne(counterOne + 1)
+  }
+
+  const incrementTwo = () =&gt; {
+    setCounterTwo(counterTwo + 1)
+  }
+
+  const isEven = () =&gt; {
+    let i = 0
+    while (i &lt; 1000000000) i += 1
+    return counterOne % 2 === 0
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;button
+        onClick={incrementOne}
+      &gt;Count One = {counterOne}&lt;/button&gt;
+      &lt;span&gt;
+        {
+          isEven() ? 'even' : 'odd'
+        }
+      &lt;/span&gt;
+      &lt;br /&gt;
+      &lt;button
+        onClick={incrementTwo}
+      &gt;Count Two = {counterTwo}&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default Counter
+</code></pre>
+
+<p>App.tsx</p>
+
+<pre><code class="language-jsx">import React from 'react'
+import './App.css'
+
+import Counter from './components/27.Counter'
+
+const App = () =&gt; {
+  return (
+    &lt;div className="App"&gt;
+      &lt;Counter /&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default App
+</code></pre>
+
+<p>页面展示如下</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1r2l1GND1gK0jSZFKXXcJrVXa-702-286.gif" alt="" /></p>
+
+<p>我们发现点击第一个按钮有较长的延迟，因为我们的判断偶数的逻辑中包含了大量的计算逻辑。但是，我们点击第二个按钮，也有较长的延迟！这很奇怪。</p>
+
+<p>这是因为，每次 state 更新时，组件会 rerender，isEven 会被执行，这就是我们点击第二个按钮时，也会卡的原因。我们需要优化，告诉 React 不要有不必要的计算，特别是这种计算量复杂的。</p>
+
+<p>在我们的示例中，我们要告诉 React，在点击第二个按钮时，不要执行 isEven 方法。这时就需要 useMemo hook 登场了。</p>
+
+<h2 id="usememo">useMemo</h2>
+
+<h3 id="section-1">优化示例</h3>
+
+<p>与 useCallback 的用法类似。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">memoizedValue</span> <span class="o">=</span> <span class="nx">useMemo</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">computeExpensiveValue</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">),</span> <span class="p">[</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">]);</span>
+</code></pre>
+</div>
+<blockquote>
+  <p>返回一个 memoized 值。<br />
+把“创建”函数和依赖项数组作为参数传入 <code class="highlighter-rouge">useMemo</code>，它仅会在某个依赖项改变时才重新计算 memoized 值。这种优化有助于避免在每次渲染时都进行高开销的计算。</p>
+
+  <p>记住，传入 <code class="highlighter-rouge">useMemo</code> 的函数会在渲染期间执行。请不要在这个函数内部执行与渲染无关的操作，诸如副作用这类的操作属于 <code class="highlighter-rouge">useEffect</code> 的适用范畴，而不是 <code class="highlighter-rouge">useMemo</code>。</p>
+
+  <p>如果没有提供依赖项数组，<code class="highlighter-rouge">useMemo</code> 在每次渲染时都会计算新的值。</p>
+
+  <p><strong>你可以把 useMemo 作为性能优化的手段，但不要把它当成语义上的保证。</strong> 将来，React 可能会选择“遗忘”以前的一些 memoized 值，并在下次渲染时重新计算它们，比如为离屏组件释放内存。先编写在没有 useMemo 的情况下也可以执行的代码 —— 之后再在你的代码中添加 useMemo，以达到优化性能的目的。</p>
+</blockquote>
+
+<p>首先引入 useMemo</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">useState</span><span class="p">,</span> <span class="nx">useMemo</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'react'</span>
+</code></pre>
+</div>
+
+<p>然后将 isEven 方法使用 useMemo 改写，返回值赋给 isEven</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">useMemo</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">while</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">1000000000</span><span class="p">)</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="k">return</span> <span class="nx">counterOne</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span>
+<span class="p">},</span> <span class="p">[</span><span class="nx">counterOne</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<p>最后记得修改 isEven 使用的地方，已经从一个方法变为了一个变量</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
+  <span class="nx">isEven</span> <span class="p">?</span> <span class="s1">'even'</span> <span class="p">:</span> <span class="s1">'odd'</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>完整代码如下</p>
+
+<p>Counter.tsx</p>
+
+<pre><code class="language-jsx">import React, { useState, useMemo } from 'react'
+
+function Counter() {
+  const [counterOne, setCounterOne] = useState(0)
+  const [counterTwo, setCounterTwo] = useState(0)
+
+  const incrementOne = () =&gt; {
+    setCounterOne(counterOne + 1)
+  }
+
+  const incrementTwo = () =&gt; {
+    setCounterTwo(counterTwo + 1)
+  }
+
+  const isEven = useMemo(() =&gt; {
+    let i = 0
+    while (i &lt; 1000000000) i += 1
+    return counterOne % 2 === 0
+  }, [counterOne])
+
+  return (
+    &lt;div&gt;
+      &lt;button
+        onClick={incrementOne}
+      &gt;Count One = {counterOne}&lt;/button&gt;
+      &lt;span&gt;
+        {
+          isEven ? 'even' : 'odd'
+        }
+      &lt;/span&gt;
+      &lt;br /&gt;
+      &lt;button
+        onClick={incrementTwo}
+      &gt;Count Two = {counterTwo}&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default Counter
+</code></pre>
+
+<p>效果如下</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1Oz_bb5cKOu4jSZKbXXc19XXa-702-286.gif" alt="" /></p>
+
+<p>我们看到点击第二个按钮时，不会有任何卡顿，这是因为使用了 useMemo 只依赖了 counterOne 变量，点击第二个按钮时，isEven 读取的是缓存值，不需要再重新计算是否为偶数。</p>
+
+<h3 id="usememo--usecallback-">useMemo 与 useCallback 的区别</h3>
+
+<p>useCallback 是缓存了函数自身，而 useMemo 是缓存了函数的返回值。</p>
+
+<h2 id="section-2">小结</h2>
+
+<p>本章通过示例展示了 useMemo 在性能优化中的作用。通过缓存函数的返回值，避免不必要的调用，从而避免了组件 rerender。</p>
+
+<p>最后有分析了 useMemo 与 useCallback 的区别，即 useMemo 是缓存了函数的返回值，useCallback 是缓存了函数自身。这两个 api 都是性能优化的方法。</p>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                        
+                        <h2 id="similar_posts">Similar Posts</h2>
+                        <ul>
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/27/react-hooks8-customHooks/">React Hooks 系列之8 custom Hook
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/26/react-hooks7-useRef/">React Hooks 系列之7 useRef
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/18/react-hooks5-useCallback/">React Hooks 系列之5 useCallback
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/13/react-hooks4-useReducer/">React Hooks 系列之4 useReducer
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/12/react-hooks3-useContext/">React Hooks 系列之3 useContext
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/11/react-hooks2-useEffect/">React Hooks 系列之2 useEffect
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+        
+            </ul>
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2020/05/18/react-hooks5-useCallback/">React Hooks 系列之5 useCallback</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2020/05/26/react-hooks7-useRef/">React Hooks 系列之7 useRef</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'https://indolem.github.io/2020/05/19/react-hooks6-useMemo/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'https://indolem.github.io/2020/05/19/react-hooks6-useMemo/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//ffajri.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+    <div class="wrapper">
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/indolem" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:indolem.benchmark@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>    
+            <a href="https://twitter.com/fajrikoto" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>     
+        </p>
+        <p>
+            Terimakasih, Ayo Kita Majukan NLP Indonesia    
+        </p>
+        <p class="power">
+            <span>
+                &copy; IndoLEM 2020.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

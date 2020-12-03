@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>React Hooks 系列之8 custom Hook</title>
+    <meta name="description" content="掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。截至目前，学习了官方的这么多 hooks api，我们也可以创造一些自己的 hooks，甚至官方也在鼓励开发者将组件逻辑抽象到自定义 hooks 中，方...">
+
+    <link rel="shortcut icon" href="/indolem.png?" type="image/x-icon">
+    <link rel="icon" href="/indolem.png?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="https://indolem.github.io/2020/05/27/react-hooks8-customHooks/">
+    <link rel="alternate" type="application/rss+xml" title="IndoLEM" href="https://indolem.github.io/feed.xml ">
+
+
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">IndoLEM</a>
+        <small>Indonesian NLP Resource Collection</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/IndoBERT/">
+                        
+                            <i class="fa fa-microchip"></i>IndoBERT
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/Task/">
+                        
+                            <i class="fa fa-database"></i>Data and Tasks
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/leaderboard/">
+                        
+                            <i class="fa fa-th-list"></i>Leaderboard
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/team/">
+                        
+                            <i class="fa fa-heart"></i>Team
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>React Hooks 系列之8 custom Hook</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2020-05-27
+            </div>
+
+            <div class="label-card">
+                <i class="fa fa-user"></i>HyG
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#JavaScript" title="Category: JavaScript" rel="category">JavaScript</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#React" title="Tag: React" rel="tag">React</a-->
+        <a href="/tag/#React" title="Tag: React" rel="tag">React</a>&nbsp;
+    
+        <!--a href="/tag/#hooks" title="Tag: hooks" rel="tag">hooks</a-->
+        <a href="/tag/#hooks" title="Tag: hooks" rel="tag">hooks</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#usedocumenttitle-" id="markdown-toc-usedocumenttitle-">useDocumentTitle 示例</a>    <ul>
+      <li><a href="#function-" id="markdown-toc-function-">function 普通写法</a></li>
+      <li><a href="#usedocumenttitle-hook" id="markdown-toc-usedocumenttitle-hook">抽象出 useDocumentTitle hook</a></li>
+    </ul>
+  </li>
+  <li><a href="#usecounter-" id="markdown-toc-usecounter-">useCounter 示例</a>    <ul>
+      <li><a href="#section" id="markdown-toc-section">冗余的写法</a></li>
+      <li><a href="#usecounter--1" id="markdown-toc-usecounter--1">useCounter 抽象</a></li>
+    </ul>
+  </li>
+  <li><a href="#useinput-" id="markdown-toc-useinput-">useInput 示例</a>    <ul>
+      <li><a href="#function--1" id="markdown-toc-function--1">function 普通写法</a></li>
+      <li><a href="#useinput-hook" id="markdown-toc-useinput-hook">抽象出 useInput hook</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-1" id="markdown-toc-section-1">小结</a></li>
+</ul>
+
+<p>掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。</p>
+
+<p>截至目前，学习了官方的这么多 hooks api，我们也可以创造一些自己的 hooks，甚至官方也在鼓励开发者将组件逻辑抽象到自定义 hooks 中，方便复用。</p>
+
+<p>自定义 Hook 是一个函数，其名称以 “use” 开头，函数内部可以调用其他的 Hook。</p>
+
+<p>通过自定义 Hook，可以将组件逻辑提取到可重用的函数中。</p>
+
+<h2 id="usedocumenttitle-">useDocumentTitle 示例</h2>
+
+<h3 id="function-">function 普通写法</h3>
+
+<p>我们想创建一个计数器，计数器的值改变后，希望改变页面的 Title</p>
+
+<p>DocTitleOne.tsx</p>
+
+<pre><code class="language-jsx">import React, { useState, useEffect } from 'react'
+
+function DocTitleOne() {
+  const [count, setCount] = useState(0)
+  useEffect(() =&gt; {
+    document.title = `Count - ${count}`
+  }, [count])
+  return (
+    &lt;div&gt;
+      &lt;button
+        onClick={() =&gt; {
+          setCount(count + 1)
+        }}
+      &gt;Count - {count}&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default DocTitleOne
+
+</code></pre>
+
+<p>App.tsx</p>
+
+<pre><code class="language-jsx">import React from 'react'
+import './App.css'
+
+import DocTitleOne from './components/31DocTitleOne'
+
+const App = () =&gt; {
+  return (
+    &lt;div className="App"&gt;
+      &lt;DocTitleOne /&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default App
+</code></pre>
+
+<p>页面展示如下</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1ilw2HUY1gK0jSZFMXXaWcVXa-407-221.gif" alt="" /></p>
+
+<p>运行没有问题，接下来又有一个需求的增量，就是页面要在另一个组件中也能改变页面的 Title，接下来我们创建一个新的组件。</p>
+
+<p>DocTitleTwo.tsx</p>
+
+<pre><code class="language-jsx">import React, { useState, useEffect } from 'react'
+
+function DocTitleTwo() {
+  const [count, setCount] = useState(0)
+  useEffect(() =&gt; {
+    document.title = `Count - ${count}`
+  }, [count])
+  return (
+    &lt;div&gt;
+      &lt;button
+        onClick={() =&gt; {
+          setCount(count + 1)
+        }}
+      &gt;Count - {count}&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default DocTitleTwo
+</code></pre>
+
+<p>App.tsx</p>
+
+<pre><code class="language-jsx">import React from 'react'
+import './App.css'
+
+import DocTitleOne from './components/31DocTitleOne'
+import DocTitleTwo from './components/31DocTitleTwo'
+
+const App = () =&gt; {
+  return (
+    &lt;div className="App"&gt;
+      &lt;DocTitleOne /&gt;
+      &lt;DocTitleTwo /&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default App
+</code></pre>
+
+<p>页面展示如下</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1sNg1HUz1gK0jSZLeXXb9kVXa-407-221.gif" alt="" /></p>
+
+<p>回顾代码，DocTitleTwo 显然重复了 DocTitleOne 的代码，设想一下如果有 10 个组件都要修改页面 title 的话，你肯定不想重复这些代码。这时就需要自定义 Hook 了。</p>
+
+<p>这个示例中，我们可以创建一个自定义 Hook 来设置页面的 title。然后使用这个自定义 Hook 在不同的组件中。</p>
+
+<h3 id="usedocumenttitle-hook">抽象出 useDocumentTitle hook</h3>
+
+<p>useDocumentTitle.tsx</p>
+
+<pre><code class="language-jsx">import { useEffect } from 'react'
+
+function useDocumentTitle(count: number) {
+  useEffect(() =&gt; {
+    document.title = `Count - ${count}`
+  }, [count])
+}
+
+export default useDocumentTitle
+</code></pre>
+
+<p>DocTitleOne.tsx</p>
+
+<pre><code class="language-jsx">import React, { useState } from 'react'
+import useDocumentTitle from './hooks/useDocumentTitle'
+
+function DocTitleOne() {
+  const [count, setCount] = useState(0)
+  useDocumentTitle(count)
+  return (
+    &lt;div&gt;
+      &lt;button
+        onClick={() =&gt; {
+          setCount(count + 1)
+        }}
+      &gt;Count - {count}&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default DocTitleOne
+</code></pre>
+
+<p>DocTitleTwo.tsx</p>
+
+<pre><code class="language-jsx">import React, { useState } from 'react'
+import useDocumentTitle from './hooks/useDocumentTitle'
+
+function DocTitleTwo() {
+  const [count, setCount] = useState(0)
+  useDocumentTitle(count)
+  return (
+    &lt;div&gt;
+      &lt;button
+        onClick={() =&gt; {
+          setCount(count + 1)
+        }}
+      &gt;Count - {count}&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default DocTitleTwo
+</code></pre>
+
+<p>App.tsx</p>
+
+<pre><code class="language-jsx">import React from 'react'
+import './App.css'
+
+import DocTitleOne from './components/31DocTitleOne'
+import DocTitleTwo from './components/31DocTitleTwo'
+
+const App = () =&gt; {
+  return (
+    &lt;div className="App"&gt;
+      &lt;DocTitleOne /&gt;
+      &lt;DocTitleTwo /&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default App
+</code></pre>
+
+<p>页面展示如下</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1sNg1HUz1gK0jSZLeXXb9kVXa-407-221.gif" alt="" /></p>
+
+<p>我们回顾一下代码</p>
+
+<p>在 DocTitleOne 中，引入了我们定义的 useDocumentTitle，传入了 count 这个状态的值。useDocumentTitle 中执行代码，将页面title 初始值设置为 0，然后继续渲染 DocTitleOne jsx 部分。点击按钮时，count 变为 1，触发了 DocTitleOne 的 rerender，useDocumentTitle 中入参也变为了 1，将页面 title 变为 1。</p>
+
+<h2 id="usecounter-">useCounter 示例</h2>
+
+<h3 id="section">冗余的写法</h3>
+
+<p>CounterOne.tsx</p>
+
+<pre><code class="language-jsx">import React, {useState} from 'react'
+
+function CounterOne() {
+  const [count, setCount] = useState(0)
+  const increment = () =&gt; {
+    setCount(prevCount =&gt; prevCount + 1)
+  }
+  const decrement = () =&gt; {
+    setCount(prevCount =&gt; prevCount - 1)
+  }
+  const reset = () =&gt; {
+    setCount(0)
+  }
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Count - {count}&lt;/h2&gt;
+      &lt;button onClick={increment}&gt;increment&lt;/button&gt;
+      &lt;button onClick={decrement}&gt;decrement&lt;/button&gt;
+      &lt;button onClick={reset}&gt;reset&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default CounterOne
+</code></pre>
+
+<p>CounterTwo.tsx</p>
+
+<pre><code class="language-jsx">import React, {useState} from 'react'
+
+function CounterTwo() {
+  const [count, setCount] = useState(0)
+  const increment = () =&gt; {
+    setCount(prevCount =&gt; prevCount + 1)
+  }
+  const decrement = () =&gt; {
+    setCount(prevCount =&gt; prevCount - 1)
+  }
+  const reset = () =&gt; {
+    setCount(0)
+  }
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Count - {count}&lt;/h2&gt;
+      &lt;button onClick={increment}&gt;increment&lt;/button&gt;
+      &lt;button onClick={decrement}&gt;decrement&lt;/button&gt;
+      &lt;button onClick={reset}&gt;reset&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default CounterTwo
+</code></pre>
+
+<p>App.tsx</p>
+
+<pre><code class="language-jsx">import React from 'react'
+import './App.css'
+import CounterOne from './components/32CounterOne'
+import CounterTwo from './components/32CounterTwo'
+
+const App = () =&gt; {
+  return (
+    &lt;div className="App"&gt;
+      &lt;CounterOne /&gt;
+      &lt;CounterTwo /&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default App
+</code></pre>
+
+<p>页面展示如下</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1Kf78HQL0gK0jSZFxXXXWHVXa-407-347.gif" alt="" /></p>
+
+<p>相同的问题，我们有大量重复代码，接下来我们来看如何使用自定义 hook 来进行优化。</p>
+
+<h3 id="usecounter--1">useCounter 抽象</h3>
+
+<p>useCounter.tsx</p>
+
+<pre><code class="language-jsx">import { useState } from 'react'
+
+function useCounter() {
+  const [count, setCount] = useState(0)
+  const increment = () =&gt; {
+    setCount(prevCount =&gt; prevCount + 1)
+  }
+  const decrement = () =&gt; {
+    setCount(prevCount =&gt; prevCount - 1)
+  }
+  const reset = () =&gt; {
+    setCount(0)
+  }
+  return [count, increment, decrement, reset]
+}
+
+export default useCounter
+</code></pre>
+
+<p>CounterOne.tsx</p>
+
+<pre><code class="language-jsx">import React from 'react'
+import useCounter from './hooks/useCounter'
+
+function CounterOne() {
+  const [count, increment, decrement, reset] = useCounter()
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Count - {count}&lt;/h2&gt;
+      &lt;button onClick={increment}&gt;increment&lt;/button&gt;
+      &lt;button onClick={decrement}&gt;decrement&lt;/button&gt;
+      &lt;button onClick={reset}&gt;reset&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default CounterOne
+</code></pre>
+
+<p>CounterTwo.tsx</p>
+
+<pre><code class="language-jsx">import React from 'react'
+import useCounter from './hooks/useCounter'
+
+function CounterTwo() {
+  const [count, increment, decrement, reset] = useCounter()
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Count - {count}&lt;/h2&gt;
+      &lt;button onClick={increment}&gt;increment&lt;/button&gt;
+      &lt;button onClick={decrement}&gt;decrement&lt;/button&gt;
+      &lt;button onClick={reset}&gt;reset&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default CounterTwo
+</code></pre>
+
+<p>App.tsx<br />
+``` jsx<br />
+import React from ‘react’<br />
+import ‘./App.css’<br />
+import CounterOne from ‘./components/32CounterOne’<br />
+import CounterTwo from ‘./components/32CounterTwo’</p>
+
+<p>const App = () =&gt; {<br />
+  return (<br />
+    &lt;div className="App"&gt;<br />
+      <counterone></counterone><br />
+      <countertwo></countertwo><br />
+    &lt;/div&gt;<br />
+  )<br />
+}</p>
+
+<p>export default App<br />
+```</p>
+
+<p>页面展示依然如下</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1Kf78HQL0gK0jSZFxXXXWHVXa-407-347.gif" alt="" /></p>
+
+<p>可以看到目前我们的代码结构就比较好了，我们还可以在 useCounter 中给 counter 设置初始值，如下</p>
+
+<p>useCounter.tsx</p>
+
+<pre><code class="language-jsx">import { useState } from 'react'
+
+function useCounter(initialValue = 0) {
+  const [count, setCount] = useState(initialValue)
+  const increment = () =&gt; {
+    setCount(prevCount =&gt; prevCount + 1)
+  }
+  const decrement = () =&gt; {
+    setCount(prevCount =&gt; prevCount - 1)
+  }
+  const reset = () =&gt; {
+    setCount(initialValue)
+  }
+  return [count, increment, decrement, reset]
+}
+
+export default useCounter
+</code></pre>
+
+<p>使用时，对应的可以传入初始值</p>
+
+<pre><code class="language-jsx">const [count, increment, decrement, reset] = useCounter(10)
+</code></pre>
+
+<p>我们还可以修改每次增加或减少的数字，如下</p>
+
+<pre><code class="language-jsx">import { useState } from 'react'
+
+function useCounter(initialValue = 0, value = 1) {
+  const [count, setCount] = useState(initialValue)
+  const increment = () =&gt; {
+    setCount(prevCount =&gt; prevCount + value)
+  }
+  const decrement = () =&gt; {
+    setCount(prevCount =&gt; prevCount - value)
+  }
+  const reset = () =&gt; {
+    setCount(initialValue)
+  }
+  return [count, increment, decrement, reset]
+}
+
+export default useCounter
+</code></pre>
+
+<p>使用时，对应的也可以增加入参</p>
+
+<pre><code class="language-jsx">const [count, increment, decrement, reset] = useCounter(10, 5)
+</code></pre>
+
+<h2 id="useinput-">useInput 示例</h2>
+
+<p>示例是一个简单表单，用户可以填写姓名</p>
+
+<h3 id="function--1">function 普通写法</h3>
+
+<p>UserForm.tsx</p>
+
+<pre><code class="language-jsx">import React, { useState, FormEvent } from 'react'
+
+function UserForm() {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const submitHandler = (e: FormEvent) =&gt; {
+    e.preventDefault()
+    console.log(`Hello ${firstName} ${lastName}`)
+  }
+  return (
+    &lt;div&gt;
+      &lt;form onSubmit={submitHandler}&gt;
+        &lt;div&gt;
+          &lt;label htmlFor=""&gt;First name&lt;/label&gt;
+          &lt;input
+            type="text"
+            value={firstName}
+            onChange={(e) =&gt; {
+              setFirstName(e.target.value)
+            }}
+          /&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;label htmlFor=""&gt;Last name&lt;/label&gt;
+          &lt;input
+            type="text"
+            value={lastName}
+            onChange={(e) =&gt; {
+              setLastName(e.target.value)
+            }}
+          /&gt;
+        &lt;/div&gt;
+        &lt;button&gt;submit&lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default UserForm
+</code></pre>
+
+<p>App.tsx</p>
+
+<pre><code class="language-jsx">import React from 'react'
+import './App.css'
+
+import UserForm from './components/33UserForm'
+
+const App = () =&gt; {
+  return (
+    &lt;div className="App"&gt;
+      &lt;UserForm /&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default App
+</code></pre>
+
+<p><img src="https://gw.alicdn.com/tfs/TB105U6HQL0gK0jSZFtXXXQCXXa-696-241.gif" alt="" /></p>
+
+<h3 id="useinput-hook">抽象出 useInput hook</h3>
+
+<p>useInput.tsx</p>
+
+<pre><code class="language-jsx">import { useState } from 'react'
+
+function useInput(initialValue: string) {
+  const [value, setValue] = useState(initialValue)
+  const reset = () =&gt; {
+    setValue(initialValue)
+  }
+  const bind = {
+    value,
+    onChange(e: any) {
+      setValue(e.target.value)
+    }
+  }
+  return [value, bind, reset]
+}
+
+export default useInput
+</code></pre>
+
+<p>UserForm.tsx</p>
+
+<pre><code class="language-jsx">import React, { FormEvent } from 'react'
+import useInput from './hooks/useInput'
+
+function UserForm() {
+
+  const [firstName, bindFirstName, resetFirstName] = useInput('')
+  const [lastName, bindLastName, resetLastName] = useInput('')
+
+  const submitHandler = (e: FormEvent) =&gt; {
+    e.preventDefault()
+    console.log(`Hello ${firstName} ${lastName}`)
+    // @ts-ignore
+    resetFirstName()
+    // @ts-ignore
+    resetLastName()
+  }
+  return (
+    &lt;div&gt;
+      &lt;form onSubmit={submitHandler}&gt;
+        &lt;div&gt;
+          &lt;label htmlFor=""&gt;First name&lt;/label&gt;
+          &lt;input
+            type="text"
+            {...bindFirstName}
+          /&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;label htmlFor=""&gt;Last name&lt;/label&gt;
+          &lt;input
+            type="text"
+            {...bindLastName}
+          /&gt;
+        &lt;/div&gt;
+        &lt;button&gt;submit&lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default UserForm
+</code></pre>
+
+<p>页面展示</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1zXxbH7T2gK0jSZFkXXcIQFXa-696-241.gif" alt="" /></p>
+
+<h2 id="section-1">小结</h2>
+
+<p>本章我们主要学习了自定义 Hook，举了 3 个例子，帮助我们学习抽象与复用代码。社区上还有很多人写了自己的自定义 Hook，大家也可以前去学习。也鼓励大家创造一些自己的自定义 Hook。</p>
+
+<p>至此，本系列完结。祝一切顺利，大家都能学到东西。</p>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                        
+                        <h2 id="similar_posts">Similar Posts</h2>
+                        <ul>
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/26/react-hooks7-useRef/">React Hooks 系列之7 useRef
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/19/react-hooks6-useMemo/">React Hooks 系列之6 useMemo
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/18/react-hooks5-useCallback/">React Hooks 系列之5 useCallback
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/13/react-hooks4-useReducer/">React Hooks 系列之4 useReducer
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/12/react-hooks3-useContext/">React Hooks 系列之3 useContext
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/11/react-hooks2-useEffect/">React Hooks 系列之2 useEffect
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+        
+            </ul>
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2020/05/26/react-hooks7-useRef/">React Hooks 系列之7 useRef</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'https://indolem.github.io/2020/05/27/react-hooks8-customHooks/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'https://indolem.github.io/2020/05/27/react-hooks8-customHooks/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//ffajri.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+    <div class="wrapper">
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/indolem" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:indolem.benchmark@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>    
+            <a href="https://twitter.com/fajrikoto" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>     
+        </p>
+        <p>
+            Terimakasih, Ayo Kita Majukan NLP Indonesia    
+        </p>
+        <p class="power">
+            <span>
+                &copy; IndoLEM 2020.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

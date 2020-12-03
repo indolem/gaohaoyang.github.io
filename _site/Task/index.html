@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Data and Tasks</title>
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="/indolem.png?" type="image/x-icon">
+    <link rel="icon" href="/indolem.png?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="https://indolem.github.io/Task/">
+    <link rel="alternate" type="application/rss+xml" title="IndoLEM" href="https://indolem.github.io/feed.xml ">
+
+
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">IndoLEM</a>
+        <small>Indonesian NLP Resource Collection</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/IndoBERT/">
+                        
+                            <i class="fa fa-microchip"></i>IndoBERT
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a class="active" href="/Task/">
+                            
+                            <i class="fa fa-database"></i>Data and Tasks
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/leaderboard/">
+                        
+                            <i class="fa fa-th-list"></i>Leaderboard
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/team/">
+                        
+                            <i class="fa fa-heart"></i>Team
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Data and Tasks</h1>
+        <hr>
+        <ul id="markdown-toc">
+  <li><a href="#part-of-speech-tagging" id="markdown-toc-part-of-speech-tagging"><strong>Part-of-speech tagging</strong></a></li>
+  <li><a href="#ner" id="markdown-toc-ner"><strong>NER</strong></a></li>
+  <li><a href="#dependency-parsing" id="markdown-toc-dependency-parsing"><strong>Dependency Parsing</strong></a></li>
+  <li><a href="#sentiment-analysis" id="markdown-toc-sentiment-analysis"><strong>Sentiment Analysis</strong></a></li>
+  <li><a href="#summarization" id="markdown-toc-summarization"><strong>Summarization</strong></a></li>
+  <li><a href="#next-tweet-prediction" id="markdown-toc-next-tweet-prediction"><strong>Next Tweet Prediction</strong></a></li>
+  <li><a href="#tweet-ordering" id="markdown-toc-tweet-ordering"><strong>Tweet Ordering</strong></a></li>
+</ul>
+
+<p><span style="font-size:16px">All data and code can be accessed in 
+<a href="https://github.com/indolem/indolem" target="_blank">IndoLEM Github Account</a> 😊 😊</span></p>
+
+<hr />
+<p><span style="color:#233279; font-size:18px">♦ Morpho-syntax and Sequence Labelling</span></p>
+
+<h5 id="part-of-speech-tagging"><strong>Part-of-speech tagging</strong></h5>
+<p><span style="font-size:15px">We use the Indonesian POS tagging of <a href="https://ieeexplore.ieee.org/document/6973519">Dinakaramani et al. (2014)</a>, 
+and 5-fold partitioning of <a href="https://arxiv.org/abs/1809.03391">Kurniawan and Aji (2018)</a>. Train/Dev/Test
+distribution is 7,222/802/2,006.</span></p>
+
+<h5 id="ner"><strong>NER</strong></h5>
+<ul>
+  <li><span style="font-size:15px">NER UI (Universitas Indonesia) by Fachri (2014) with training/dev/test distribution:
+1,530/170/425.</span></li>
+  <li><span style="font-size:15px">NER UGM (Universitas Gajah Mada) by Gultom and Wibowo (2017) with Train/Dev/Test ditribution:
+1,687/187/469.</span></li>
+</ul>
+
+<h5 id="dependency-parsing"><strong>Dependency Parsing</strong></h5>
+<ul style="font-size:15px">
+<li> UD-Indo-PUD: 1,000 sentences of UD-Indo-PUD (<a href="https://www.aclweb.org/anthology/K17-3001/">Zeman et al., 2018</a>), and we use the corrected version by  <a href="https://github.com/ialfina/revised-id-pud">Alfina et al. (2019)</a></li>
+<li> UD-Indo-GSD: 5,593 sentences of UD-Indo-GSD (<a href="https://www.aclweb.org/anthology/P13-2017/">McDonald et al., 2013</a>)</li>
+</ul>
+<hr />
+<p><span style="color:#233279; font-size:18px">♦ Semantic Task</span></p>
+
+<h5 id="sentiment-analysis"><strong>Sentiment Analysis</strong></h5>
+<p><span style="font-size:15px">This dataset is based on binary classification (positive and negative), with distribution:</span></p>
+<ul style="font-size:15px">
+  <li>Train: 3638 sentences</li>
+  <li>Development: 399 sentences</li>
+  <li>Test: 1011 sentences </li>
+</ul>
+<p><span style="font-size:15px">The data is sourced from 1) Twitter (<a href="https://www.researchgate.net/publication/321757985_InSet_Lexicon_Evaluation_of_a_Word_List_for_Indonesian_Sentiment_Analysis_in_Microblogs">Koto and Rahmaningtyas, 2017</a>)
+ and 2) <a href="https://github.com/annisanurulazhar/absa-playground/">hotel reviews</a>.
+</span></p>
+
+<h5 id="summarization"><strong>Summarization</strong></h5>
+<ul style="font-size:15px">
+  <li>IndoSum, by <a href="https://arxiv.org/abs/1810.05334">Kurniawan and Louvan, (2018)</a>: is constructed from CNN Indonesian and Kumparan, with train/dev/test distribution: 14,262/750/3,762. </li>
+  <li>Liputan6, by <a href="https://arxiv.org/abs/2011.00679">Koto et al., (2020)</a>: is the first large-scale Indonesian corpus for Abstractive and Extractive summarization. This data is from year 2000 - 2010. Train/Dev/Test distribution: 193,883/10,972/10,972.</li>
+</ul>
+<hr />
+<p><span style="color:#233279; font-size:18px">♦ Discourse Coherence</span></p>
+
+<h5 id="next-tweet-prediction"><strong>Next Tweet Prediction</strong></h5>
+<p><span style="font-size:15px">To evaluate model coherence, we design a next tweet prediction (NTP) 
+task that is similar to the next sentence prediction (NSP) task used to train BERT
+(<a href="https://www.aclweb.org/anthology/N19-1423/">Devlin et al., 2019</a>). In NTP, each instance consists of a Twitter thread 
+(2–4 tweets) that we call the premise, and four possible options for the next tweet, one of which is the actual 
+response from the original thread.</span></p>
+<ul style="font-size:15px">
+ <li> Train: 5,681 threads</li>
+ <li> Development: 811 threads</li>
+ <li> Test: 1,890 threads</li>
+</ul>
+
+<h5 id="tweet-ordering"><strong>Tweet Ordering</strong></h5>
+<p><span style="font-size:15px">This task is based on the sentence ordering task of 
+<a href="https://www.aclweb.org/anthology/J08-1001/">Barzilay and Lapata (2008)</a> to assess text relatedness. 
+We construct the data by shuffling Twitter threads (containing 3–5 tweets), and assessing the predicted
+ordering in terms of rank correlation (ρ) with the original.</span></p>
+<ul style="font-size:15px">
+ <li> Train: 4,327 threads</li>
+ <li> Development: 760 threads</li>
+ <li> Test: 1,521 threads</li>
+</ul>
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+    <div class="wrapper">
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/indolem" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:indolem.benchmark@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>    
+            <a href="https://twitter.com/fajrikoto" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>     
+        </p>
+        <p>
+            Terimakasih, Ayo Kita Majukan NLP Indonesia    
+        </p>
+        <p class="power">
+            <span>
+                &copy; IndoLEM 2020.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>IndoLEM</title>
+    <description></description>
+    <link>https://indolem.github.io/</link>
+    <atom:link href="https://indolem.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Thu, 03 Dec 2020 22:46:07 +1100</pubDate>
+    <lastBuildDate>Thu, 03 Dec 2020 22:46:07 +1100</lastBuildDate>
+    <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>React Hooks 系列之8 custom Hook</title>
+        <description>
+掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。
+
+截至目前，学习了官方的这么多 hooks api，我们也可以创造一些自己的 hooks，甚至官方也在鼓励开发者将组件逻辑抽象到自定义 hooks 中，方便复用。
+
+自定义 Hook 是一个函数，其名称以 “use” 开头，函数内部可以调用其他的 Hook。
+
+通过自定义 Hook，可以将组件逻辑提取到可重用的函数中。
+
+</description>
+        <pubDate>Wed, 27 May 2020 00:00:00 +1000</pubDate>
+        <link>https://indolem.github.io/2020/05/27/react-hooks8-customHooks/</link>
+        <guid isPermaLink="true">https://indolem.github.io/2020/05/27/react-hooks8-customHooks/</guid>
+        
+        <category>React</category>
+        
+        <category>hooks</category>
+        
+        
+        <category>JavaScript</category>
+        
+      </item>
+    
+      <item>
+        <title>React Hooks 系列之7 useRef</title>
+        <description>
+掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。
+
+接下来我们要一起学习 useRef hook，它可以让我们直接访问到组件中的的 Dom 节点。我们今天通过一个 input 输入框获取焦点的需求为例，来学习一下 useRef。
+
+</description>
+        <pubDate>Tue, 26 May 2020 00:00:00 +1000</pubDate>
+        <link>https://indolem.github.io/2020/05/26/react-hooks7-useRef/</link>
+        <guid isPermaLink="true">https://indolem.github.io/2020/05/26/react-hooks7-useRef/</guid>
+        
+        <category>React</category>
+        
+        <category>hooks</category>
+        
+        
+        <category>JavaScript</category>
+        
+      </item>
+    
+      <item>
+        <title>React Hooks 系列之6 useMemo</title>
+        <description>
+掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。
+
+上一章，我们学习了 useCallback 来进行性能优化，关于性能优化还有另一个 hook api，那就是 useMemo，下面我们一起通过一个例子来看看。
+
+</description>
+        <pubDate>Tue, 19 May 2020 00:00:00 +1000</pubDate>
+        <link>https://indolem.github.io/2020/05/19/react-hooks6-useMemo/</link>
+        <guid isPermaLink="true">https://indolem.github.io/2020/05/19/react-hooks6-useMemo/</guid>
+        
+        <category>React</category>
+        
+        <category>hooks</category>
+        
+        
+        <category>JavaScript</category>
+        
+      </item>
+    
+      <item>
+        <title>React Hooks 系列之5 useCallback</title>
+        <description>
+掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。
+
+在我们开始深入学习 useCallback 前，先回顾一下性能优化相关的内容，这将有助于我们理解什么是 useCallback，为什么使用它，以及怎么使用它。
+
+依然先从一个组件多次被复用的代码场景看起。
+
+</description>
+        <pubDate>Mon, 18 May 2020 00:00:00 +1000</pubDate>
+        <link>https://indolem.github.io/2020/05/18/react-hooks5-useCallback/</link>
+        <guid isPermaLink="true">https://indolem.github.io/2020/05/18/react-hooks5-useCallback/</guid>
+        
+        <category>React</category>
+        
+        <category>hooks</category>
+        
+        
+        <category>JavaScript</category>
+        
+      </item>
+    
+      <item>
+        <title>React Hooks 系列之4 useReducer</title>
+        <description>
+掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。
+
+截止目前我们已经学习了3个hook api，&lt;code class=&quot;highlighter-rouge&quot;&gt;useState&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;useEffect&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;useContext&lt;/code&gt;。接下来我们学习下一个 hook api，&lt;code class=&quot;highlighter-rouge&quot;&gt;useReducer&lt;/code&gt;。首先我们将讲讲什么是 reducer，以及为什么使用 reducer。研究一下 JavaScript 中的 reducer 是什么，这将有助于理解 react hook 中的 &lt;code class=&quot;highlighter-rouge&quot;&gt;useReducer&lt;/code&gt;。好，现在开始吧。
+
+</description>
+        <pubDate>Wed, 13 May 2020 00:00:00 +1000</pubDate>
+        <link>https://indolem.github.io/2020/05/13/react-hooks4-useReducer/</link>
+        <guid isPermaLink="true">https://indolem.github.io/2020/05/13/react-hooks4-useReducer/</guid>
+        
+        <category>React</category>
+        
+        <category>hooks</category>
+        
+        
+        <category>JavaScript</category>
+        
+      </item>
+    
+      <item>
+        <title>React Hooks 系列之3 useContext</title>
+        <description>
+掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。
+
+今天我们讲讲 Context 对象和 useContext 的使用方法。
+
+</description>
+        <pubDate>Tue, 12 May 2020 00:00:00 +1000</pubDate>
+        <link>https://indolem.github.io/2020/05/12/react-hooks3-useContext/</link>
+        <guid isPermaLink="true">https://indolem.github.io/2020/05/12/react-hooks3-useContext/</guid>
+        
+        <category>React</category>
+        
+        <category>hooks</category>
+        
+        
+        <category>JavaScript</category>
+        
+      </item>
+    
+      <item>
+        <title>React Hooks 系列之2 useEffect</title>
+        <description>
+掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。
+
+今天我们讲讲 useEffect 的使用方法。
+
+</description>
+        <pubDate>Mon, 11 May 2020 00:00:00 +1000</pubDate>
+        <link>https://indolem.github.io/2020/05/11/react-hooks2-useEffect/</link>
+        <guid isPermaLink="true">https://indolem.github.io/2020/05/11/react-hooks2-useEffect/</guid>
+        
+        <category>React</category>
+        
+        <category>hooks</category>
+        
+        
+        <category>JavaScript</category>
+        
+      </item>
+    
+      <item>
+        <title>React Hooks 系列之1 useState</title>
+        <description>
+本系列将讲述 React Hooks 的使用方法，从 useState 开始，将包含如下内容：
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://juejin.im/post/5e8324ade51d45470921f86a&quot;&gt;useState&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://juejin.im/post/5eb910b35188256d58312c7e&quot;&gt;useEffect&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://juejin.im/post/5eb912246fb9a0436e47f947&quot;&gt;useContext&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://juejin.im/post/5ebba47fe51d454dd5062f5b&quot;&gt;useReducer&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://juejin.im/post/5ec2465a5188256d841a552a&quot;&gt;useCallback&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://juejin.im/post/5ec293a55188256d754876fc&quot;&gt;useMemo&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://juejin.im/post/5ecbf486f265da7711699c3a&quot;&gt;useRef&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://juejin.im/post/5ecd4c86f265da76ff6d0f16&quot;&gt;custom hooks&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。
+
+前提，需要会使用 React Class 的写法，会使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;setState()&lt;/code&gt; 和 props。
+
+下面从第一个例子开始吧。
+
+</description>
+        <pubDate>Sun, 01 Mar 2020 00:00:00 +1100</pubDate>
+        <link>https://indolem.github.io/2020/03/01/react-hooks1-useState/</link>
+        <guid isPermaLink="true">https://indolem.github.io/2020/03/01/react-hooks1-useState/</guid>
+        
+        <category>React</category>
+        
+        <category>hooks</category>
+        
+        
+        <category>JavaScript</category>
+        
+      </item>
+    
+      <item>
+        <title>队列在前端弹窗中的应用</title>
+        <description>
+&lt;img src=&quot;https://gw.alicdn.com/tfs/TB1rgXfXYY1gK0jSZTEXXXDQVXa-700-404.png&quot; alt=&quot;&quot; /&gt;
+
+前端开发中，如果遇到复杂的交互逻辑，数据结构的知识将帮助你理清思路，抽象逻辑，完成稳定可靠的逻辑代码。
+
+本文就讲讲我在开发弹窗时加入的队列数据结构，也许有人疑问弹窗不是很简单吗，还需要引入队列？其实在复杂交互中，特别是互动类的界面中，很容易就会有超过 10 个弹窗对话框，万一同时被触发时，逻辑就会混乱，我们希望一个接一个的方式弹出，这里就需要队列了。
+
+</description>
+        <pubDate>Thu, 18 Jul 2019 00:00:00 +1000</pubDate>
+        <link>https://indolem.github.io/2019/07/18/dialog-queue/</link>
+        <guid isPermaLink="true">https://indolem.github.io/2019/07/18/dialog-queue/</guid>
+        
+        <category>dialog</category>
+        
+        <category>queue</category>
+        
+        
+        <category>JavaScript</category>
+        
+      </item>
+    
+      <item>
+        <title>vscode 插件 markdown-schedule-snippet</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;起因&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;起因&lt;/h2&gt;
+
+不知道大家是怎样安排自己的日常计划的，我习惯是建立一个仓库，按照年/周记录在 markdown 里，平时这个仓库也写点简单的 demo，目录类似如下：
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;week
+├── 2016
+├── 2017
+├── 2018
+│   ├── 20180102.md
+│   ├── 20180108.md
+│   ├── 20180115.md
+│   ├── 20180122.md
+│   ├── 20180126.md
+│   ├── ...
+│   ├── ...
+│   ├── ...
+│   ├── 20181007.md
+│   ├── pixi.md
+│   ├── schedule.md
+│   ├── temp.css
+│   ├── temp.html
+│   ├── temp.js
+│   ├── temp.json
+│   └── temp.md
+├── package.json
+└── yarn.lock
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+</description>
+        <pubDate>Wed, 10 Oct 2018 00:00:00 +1100</pubDate>
+        <link>https://indolem.github.io/2018/10/10/vscode-plugin-schedule/</link>
+        <guid isPermaLink="true">https://indolem.github.io/2018/10/10/vscode-plugin-schedule/</guid>
+        
+        <category>效率</category>
+        
+        <category>vscode</category>
+        
+        <category>markdown</category>
+        
+        
+        <category>JavaScript</category>
+        
+      </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>React Hooks 系列之3 useContext</title>
+    <meta name="description" content="掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。今天我们讲讲 Context 对象和 useContext 的使用方法。">
+
+    <link rel="shortcut icon" href="/indolem.png?" type="image/x-icon">
+    <link rel="icon" href="/indolem.png?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="https://indolem.github.io/2020/05/12/react-hooks3-useContext/">
+    <link rel="alternate" type="application/rss+xml" title="IndoLEM" href="https://indolem.github.io/feed.xml ">
+
+
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">IndoLEM</a>
+        <small>Indonesian NLP Resource Collection</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/IndoBERT/">
+                        
+                            <i class="fa fa-microchip"></i>IndoBERT
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/Task/">
+                        
+                            <i class="fa fa-database"></i>Data and Tasks
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/leaderboard/">
+                        
+                            <i class="fa fa-th-list"></i>Leaderboard
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/team/">
+                        
+                            <i class="fa fa-heart"></i>Team
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>React Hooks 系列之3 useContext</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2020-05-12
+            </div>
+
+            <div class="label-card">
+                <i class="fa fa-user"></i>HyG
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#JavaScript" title="Category: JavaScript" rel="category">JavaScript</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#React" title="Tag: React" rel="tag">React</a-->
+        <a href="/tag/#React" title="Tag: React" rel="tag">React</a>&nbsp;
+    
+        <!--a href="/tag/#hooks" title="Tag: hooks" rel="tag">hooks</a-->
+        <a href="/tag/#hooks" title="Tag: hooks" rel="tag">hooks</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#context-api" id="markdown-toc-context-api">什么是 Context Api</a></li>
+  <li><a href="#context" id="markdown-toc-context">使用 Context</a>    <ul>
+      <li><a href="#context-1" id="markdown-toc-context-1">创建 context</a></li>
+      <li><a href="#provider" id="markdown-toc-provider">提供 Provider</a></li>
+      <li><a href="#context-2" id="markdown-toc-context-2">在使用的节点处消费 Context</a></li>
+      <li><a href="#context-" id="markdown-toc-context-">多个 Context 情况</a></li>
+    </ul>
+  </li>
+  <li><a href="#usecontext" id="markdown-toc-usecontext">useContext</a></li>
+</ul>
+
+<p>掌握 React Hooks api 将更好的帮助你在工作中使用，对 React 的掌握更上一层楼。本系列将使用大量实例代码和效果展示，非常易于初学者和复习使用。</p>
+
+<p>今天我们讲讲 Context 对象和 useContext 的使用方法。</p>
+
+<h2 id="context-api">什么是 Context Api</h2>
+
+<p>考虑这样一种场景，如果组件树结构如下，现在想从根节点传递一个 userName 的属性到叶子节点 A D F，通过 props 的方式传递，会不可避免的传递通过 B C E，即使这些组件也没有使用这个 userName 属性。</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1Nl38AAT2gK0jSZFkXXcIQFXa-1432-870.png" alt="" /></p>
+
+<p>如果这样的嵌套树形结构有5层或10层，那么将是灾难式的开发维护体验。如果能不经过中间的节点直接到达需要的地方就可以避免这种问题，这时 Context api 就是来解决这个问题的。</p>
+
+<p>Context api 是在组件树中传递数据但不用每层都经过的一种 api。下面我们一起看看 Context Hook 的使用方法。</p>
+
+<h2 id="context">使用 Context</h2>
+
+<p>我们举个例子重点看下最右边的分支，C E F，从根节点传递一个变量 username 到 F 节点。</p>
+
+<p>我们先创建好 App, ComponentC, ComponentE, ComponentF, 如下</p>
+
+<p>App.tsx</p>
+
+<pre><code class="language-jsx">import React from 'react'
+
+import './App.css'
+
+import ComponentC from './components/16ComponentC'
+
+const App = () =&gt; {
+  return (
+    &lt;div className="App"&gt;
+      &lt;ComponentC /&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default App
+</code></pre>
+
+<p>ComponentC.tsx</p>
+
+<pre><code class="language-tsx">import React from 'react'
+
+import ComponentE from './16ComponentE'
+
+function ComponentC() {
+  return (
+    &lt;div&gt;
+      &lt;ComponentE /&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default ComponentC
+
+</code></pre>
+
+<p>ComponentE.tsx</p>
+
+<pre><code class="language-tsx">import React from 'react'
+
+import ComponentF from './16ComponentF'
+
+function ComponentE() {
+  return (
+    &lt;div&gt;
+      &lt;ComponentF /&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default ComponentE
+
+</code></pre>
+
+<p>ComponentF.tsx</p>
+
+<pre><code class="language-tsx">import React from 'react'
+
+function ComponentF() {
+  return (
+    &lt;div&gt;
+      ComponentF
+    &lt;/div&gt;
+  )
+}
+
+export default ComponentF
+</code></pre>
+
+<p>页面展示如下：</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1_nrMFkL0gK0jSZFAXXcA9pXa-438-193.png" alt="" /></p>
+
+<p>接下来我们来研究如何使用 Context 将 username 从 App 传递到 ComponentF，共分为以下3个步骤</p>
+
+<h3 id="context-1">创建 context</h3>
+
+<p>在根节点 App.tsx 中使用 <code class="highlighter-rouge">createContext()</code> 来创建一个 context</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">UserContext</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createContext</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<blockquote>
+  <p>创建一个 Context 对象。当 React 渲染一个订阅了这个 Context 对象的组件，这个组件会从组件树中离自身最近的那个匹配的 Provider 中读取到当前的 context 值。</p>
+
+  <p>只有当组件所处的树中没有匹配到 Provider 时，其 defaultValue 参数才会生效。这有助于在不使用 Provider 包装组件的情况下对组件进行测试。注意：将 undefined 传递给 Provider 的 value 时，消费组件的 defaultValue 不会生效。</p>
+</blockquote>
+
+<h3 id="provider">提供 Provider</h3>
+
+<p>在根节点中使用 Provider 包裹子节点，将 context 提供给子节点</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">UserContext</span><span class="p">.</span><span class="nx">Provider</span> <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="s1">'chuanshi'</span><span class="p">}</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">ComponentC</span> <span class="o">/&gt;</span>
+<span class="o">&lt;</span><span class="sr">/UserContext.Provider</span><span class="err">&gt;
+</span></code></pre>
+</div>
+
+<blockquote>
+  <p>每个 Context 对象都会返回一个 Provider React 组件，它允许消费组件订阅 context 的变化。</p>
+
+  <p>Provider 接收一个 <code class="highlighter-rouge">value</code> 属性，传递给消费组件。一个 Provider 可以和多个消费组件有对应关系。多个 Provider 也可以嵌套使用，里层的会覆盖外层的数据。</p>
+
+  <p>当 Provider 的 <code class="highlighter-rouge">value</code> 值发生变化时，它内部的所有消费组件都会重新渲染。Provider 及其内部 consumer 组件都不受制于 <code class="highlighter-rouge">shouldComponentUpdate</code> 函数，因此当 consumer 组件在其祖先组件退出更新的情况下也能更新。</p>
+
+  <p>通过新旧值检测来确定变化，使用了与 Object.is 相同的算法。</p>
+</blockquote>
+
+<p>别忘了将之前定义好的 Context export 出去，以便在子孙节点中引入</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kr">export</span> <span class="kr">const</span> <span class="nx">UserContext</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createContext</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>此时 App.tsx 的完整代码为</p>
+
+<pre><code class="language-jsx">import React from 'react'
+
+import './App.css'
+
+import ComponentC from './components/16ComponentC'
+
+export const UserContext = React.createContext('')
+
+const App = () =&gt; {
+  return (
+    &lt;div className="App"&gt;
+      &lt;UserContext.Provider value={'chuanshi'}&gt;
+        &lt;ComponentC /&gt;
+      &lt;/UserContext.Provider&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default App
+</code></pre>
+
+<h3 id="context-2">在使用的节点处消费 Context</h3>
+
+<p>import context 对象</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="p">{</span> <span class="nx">UserContext</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'../App'</span>
+</code></pre>
+</div>
+
+<p>使用 Consumer 进行消费</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">UserContext</span><span class="p">.</span><span class="nx">Consumer</span><span class="o">&gt;</span>
+  <span class="p">{</span>
+    <span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+        <span class="nx">User</span> <span class="nx">context</span> <span class="nx">value</span> <span class="p">{</span><span class="nx">user</span><span class="p">}</span>
+      <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="o">&lt;</span><span class="sr">/UserContext.Consumer</span><span class="err">&gt;
+</span></code></pre>
+</div>
+
+<blockquote>
+  <p>这里，React 组件也可以订阅到 context 变更。这能让你在函数式组件中完成订阅 context。</p>
+
+  <p>这需要函数作为子元素（function as a child）这种做法。这个函数接收当前的 context 值，返回一个 React 节点。传递给函数的 value 值等同于往上组件树离这个 context 最近的 Provider 提供的 value 值。如果没有对应的 Provider，value 参数等同于传递给 createContext() 的 defaultValue。</p>
+</blockquote>
+
+<p>完整的 ComponentF.tsx 代码如下</p>
+
+<pre><code class="language-jsx">import React from 'react'
+
+import { UserContext } from '../App'
+
+function ComponentF() {
+  return (
+    &lt;div&gt;
+      &lt;UserContext.Consumer&gt;
+        {
+          (user) =&gt; (
+            &lt;div&gt;
+              User context value {user}
+            &lt;/div&gt;
+          )
+        }
+      &lt;/UserContext.Consumer&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default ComponentF
+</code></pre>
+
+<p>效果如下</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1CSB6FpT7gK0jSZFpXXaTkpXa-448-210.png" alt="" /></p>
+
+<p>目前看只有1个 Context 的时候情况还好，下面我们来看看有多个 Context 的情况</p>
+
+<h3 id="context-">多个 Context 情况</h3>
+
+<p>我们在 App.tsx 中再增加一个 Context</p>
+
+<pre><code class="language-jsx">import React from 'react'
+
+import './App.css'
+
+import ComponentC from './components/16ComponentC'
+
+export const UserContext = React.createContext('')
+export const ChannelContext = React.createContext('')
+
+const App = () =&gt; {
+  return (
+    &lt;div className="App"&gt;
+      &lt;UserContext.Provider value={'chuanshi'}&gt;
+        &lt;ChannelContext.Provider value={'code volution'}&gt;
+          &lt;ComponentC /&gt;
+        &lt;/ChannelContext.Provider&gt;
+      &lt;/UserContext.Provider&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default App
+</code></pre>
+
+<p>接下来在 component F 中消费它们</p>
+
+<pre><code class="language-jsx">import React from 'react'
+
+import { UserContext, ChannelContext } from '../App'
+
+function ComponentF() {
+  return (
+    &lt;div&gt;
+      &lt;UserContext.Consumer&gt;
+        {
+          (user) =&gt; (
+            &lt;ChannelContext.Consumer&gt;
+              {
+                (channel) =&gt; (
+                  &lt;div&gt;
+                    User context value {user}, channel value {channel}
+                  &lt;/div&gt;
+                )
+              }
+            &lt;/ChannelContext.Consumer&gt;
+
+          )
+        }
+      &lt;/UserContext.Consumer&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default ComponentF
+</code></pre>
+
+<p>页面展示如下</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1XC47Fvb2gK0jSZK9XXaEgFXa-453-183.png" alt="" /></p>
+
+<p>虽然代码运行没有问题，但是美观性和可读性都不太好，如果使用多个 Context，有个更好的方法，就是使用 Context hook 来解决消费多个 Context 的代码优雅问题。</p>
+
+<h2 id="usecontext">useContext</h2>
+
+<p>举个例子，我们在上述的 demo 中的 component E 中通过 <code class="highlighter-rouge">useContext</code> 使用根节点创建的 Context。分为以下步骤</p>
+
+<ol>
+  <li>从 react 对象中 import <code class="highlighter-rouge">useContext</code> 这个 hook api</li>
+  <li>import 根节点创建的 Context 对象（可以导入多个）</li>
+  <li>执行 <code class="highlighter-rouge">useContext()</code> 方法，将 Context 传入</li>
+</ol>
+
+<p>ComponentE 完整代码:</p>
+
+<pre><code class="language-jsx">import React, { useContext } from 'react'
+
+import ComponentF from './16ComponentF'
+import {UserContext, ChannelContext} from '../App'
+
+function ComponentE() {
+  const user = useContext(UserContext)
+  const channel = useContext(ChannelContext)
+  return (
+    &lt;div&gt;
+      &lt;ComponentF /&gt;
+      --- &lt;br/&gt;
+      {user} - {channel}
+    &lt;/div&gt;
+  )
+}
+
+export default ComponentE
+</code></pre>
+
+<p>页面展示如下</p>
+
+<p><img src="https://gw.alicdn.com/tfs/TB1NnVuFUT1gK0jSZFhXXaAtVXa-453-224.png" alt="" /></p>
+
+<p>其关键的一行代码如下</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">useContext</span><span class="p">(</span><span class="nx">MyContext</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<blockquote>
+  <p>useContext 方法接收一个 context 对象（<code class="highlighter-rouge">React.createContext</code> 的返回值）并返回该 context 的当前值。当前的 context 值由上层组件中距离当前组件最近的 <code class="highlighter-rouge">&lt;MyContext.Provider&gt;</code> 的 <code class="highlighter-rouge">value</code> prop 决定。</p>
+
+  <p>当组件上层最近的 <code class="highlighter-rouge">&lt;MyContext.Provider&gt;</code> 更新时，该 Hook 会触发重渲染，并使用最新传递给 <code class="highlighter-rouge">MyContext</code> provider 的 context <code class="highlighter-rouge">value</code> 值。即使祖先使用 <code class="highlighter-rouge">React.memo</code> 或 <code class="highlighter-rouge">shouldComponentUpdate</code>，也会在组件本身使用 <code class="highlighter-rouge">useContext</code> 时重新渲染。</p>
+
+  <p>可以理解为，<code class="highlighter-rouge">useContext(MyContext)</code> 相当于 class 组件中的 <code class="highlighter-rouge">static contextType = MyContext</code> 或者 <code class="highlighter-rouge">&lt;MyContext.Consumer&gt;</code>。</p>
+
+  <p><code class="highlighter-rouge">useContext(MyContext)</code> 只是让你能够读取 context 的值以及订阅 context 的变化。你仍然需要在上层组件树中使用 <code class="highlighter-rouge">&lt;MyContext.Provider&gt;</code> 来为下层组件提供 context。</p>
+</blockquote>
+
+<p>至此，关于 useContext hook api 我们已经掌握了使用方式，可以看到通过 useContext 可以极大的减小多个 Context 使用的代码复杂的问题。</p>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                        
+                        <h2 id="similar_posts">Similar Posts</h2>
+                        <ul>
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/27/react-hooks8-customHooks/">React Hooks 系列之8 custom Hook
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/26/react-hooks7-useRef/">React Hooks 系列之7 useRef
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/19/react-hooks6-useMemo/">React Hooks 系列之6 useMemo
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/18/react-hooks5-useCallback/">React Hooks 系列之5 useCallback
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/13/react-hooks4-useReducer/">React Hooks 系列之4 useReducer
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2020/05/11/react-hooks2-useEffect/">React Hooks 系列之2 useEffect
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+        
+            </ul>
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2020/05/11/react-hooks2-useEffect/">React Hooks 系列之2 useEffect</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2020/05/13/react-hooks4-useReducer/">React Hooks 系列之4 useReducer</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'https://indolem.github.io/2020/05/12/react-hooks3-useContext/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'https://indolem.github.io/2020/05/12/react-hooks3-useContext/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//ffajri.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+    <div class="wrapper">
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/indolem" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:indolem.benchmark@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>    
+            <a href="https://twitter.com/fajrikoto" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>     
+        </p>
+        <p>
+            Terimakasih, Ayo Kita Majukan NLP Indonesia    
+        </p>
+        <p class="power">
+            <span>
+                &copy; IndoLEM 2020.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

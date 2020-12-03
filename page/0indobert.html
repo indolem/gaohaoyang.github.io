@@ -1,0 +1,63 @@
+---
+layout: default
+title: IndoBERT
+permalink: /IndoBERT/
+icon: microchip
+type: page
+---
+
+<!-- <h1>Archive of posts with {{ page.type }} '{{ page.title }}'</h1> -->
+
+
+<div class="page clearfix" index>
+
+    <div class="left" style="width: 100%; margin: 0 auto">
+      <h1> IndoBERT </h1>
+    </div>
+    <div class="left" style="width: 100%; margin: 0 auto">
+      <div>
+      <p style="font-size:95%">
+      <a href="https://huggingface.co/indolem/indobert-base-uncased" target="_blank"><b>IndoBERT</b></a>
+      is the Indonesian version of BERT model. We train the model using over 220M words, aggregated from three main sources:
+      </p>
+      </div>
+      <div>
+      <ul>
+        <li style="font-size:95%; color:#1A1818">Indonesian Wikipedia (74M words) </li>
+        <li style="font-size:95%; color:#1A1818">news articles from Kompas, Tempo (Tala et al., 2003)  and Liputan6 (55M words in total)</li>
+        <li style="font-size:95%; color:#1A1818">Indonesian Web Corpus (Medved and Suchomel, 2017) (90M words)</li>
+      </ul>
+      </div>
+      <div>
+      <p style="font-size:95%">
+      We trained the model for 2.4M steps (180 epochs) with the <b>final perplexity
+      over the development set being 3.97 (similar to English BERT-base)</b>.
+      </p>
+      </div>
+
+      <span style="font-size:95%"> <b>How to Use:</b> </span>
+      </br>
+      <span style="font-size:95%">We use Huggingface (Pytorch) Framework. You can download them by
+        <code>pip install transformers==3.5.1</code></span>
+      <div style="font-size:95%">
+        <code>from transformers import AutoTokenizer, AutoModel</code> </br>
+        <code>tokenizer = AutoTokenizer.from_pretrained("indolem/indobert-base-uncased")</code></br>
+        <code>model = AutoModel.from_pretrained("indolem/indobert-base-uncased")</code>
+      </div>
+      
+      </br>
+      <span style="font-size:95%"> <b>Reference for BERT and Transformer:</b> </span>
+      </br>
+      <span style="font-size:95%">Don't worry if you are new with pre-trained language model.
+        You can check these references:</span>
+      <div style="margin-top: 0">
+        <ul>
+          <li style="font-size:95%; color:#1A1818">
+            <a href="https://arxiv.org/abs/1706.03762" target="_blank">Attention is All You Need</a> </li>
+          <li style="font-size:95%; color:#1A1818">
+            <a href="https://arxiv.org/abs/1810.04805" target="_blank">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</a> </li>
+        </ul>
+      </div>
+    </div>
+</div>
+<script src="{{ "/js/pageContent.js " | prepend: site.baseurl }}" charset="utf-8"></script>
