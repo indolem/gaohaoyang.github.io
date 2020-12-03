@@ -11,7 +11,7 @@ type: page
 <style>
 .styled-table {
     border-collapse: collapse;
-    margin: 12px 0;
+    margin: 10px 0;
     font-size: 0.9em;
     font-family: sans-serif;
     min-width: 400px;
@@ -50,6 +50,7 @@ type: page
 
 ##### **POS and NER**
 
+<div style='overflow-x:auto'>
 <table class="styled-table">
     <thead>
         <tr>
@@ -86,10 +87,14 @@ type: page
         </tr>
     </tbody>
 </table>
+</div>
+
+
 - - - - - - - - - - - - -
 
 ##### **Dependency Parsing**
 
+<div style='overflow-x:auto'>
 <table class="styled-table">
     <thead>
         <tr>
@@ -135,10 +140,12 @@ type: page
         </tr>
     </tbody>
 </table>
+</div>
 - - - - - - - - - - - - -
 
 ##### **Semantic**
 
+<div style='overflow-x:auto'>
 <table class="styled-table">
     <thead>
         <tr>
@@ -200,10 +207,12 @@ type: page
         </tr>
     </tbody>
 </table>
+</div>
 - - - - - - - - - - - - -
 
 ##### **Discourse Coherency**
 
+<div style='overflow-x:auto'>
 <table class="styled-table">
     <thead>
         <tr>
@@ -235,4 +244,4 @@ type: page
         </tr>
     </tbody>
 </table>
-
+</div>
