@@ -44,7 +44,7 @@ type: page
 </style>
 
 <span style="font-size:16px">We open any submission for each category listed below. Please follow 
-<a href="https://github.com/indolem/indolem" target="_blank">this instruction</a> &#128522; &#128522; &#128522; &#128522; &#128522;</span>
+<a href="https://github.com/indolem/indolem" target="_blank">this instruction</a> &#128522;</span>
 
 - - - - - - - - - - - - -
 

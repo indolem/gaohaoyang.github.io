@@ -9,7 +9,7 @@ type: page
 {:toc}
 
 <span style="font-size:16px">All data and code can be accessed in 
-<a href="https://github.com/indolem/indolem" target="_blank">IndoLEM Github Account</a> &#128522; &#128522;</span>
+<a href="https://github.com/indolem/indolem" target="_blank">IndoLEM Github Account</a> &#128522;</span>
 
 - - - - - - - - - - - - -
 <span style="color:#233279; font-size:18px">&#9830; Morpho-syntax and Sequence Labelling</span>
